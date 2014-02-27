@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -116,7 +117,13 @@ public class MainActivity extends Activity {
 
         mCalendarHelper = new CalendarHelper(getLoaderManager(), this);
 
-        //mCalendarHelper.listCalendars();
+        mCalendarHelper.getCalendarId(getIntent().getStringExtra(LauncherActivity.EXTRA_ZENCAL_URI), new Callback<Long>() {
+            @Override
+            public void onResult(Long result) {
+                Log.i(CalendarHelper.LOG_TAG, String.valueOf(result));
+            }
+        });
+
     }
 
     @Override
