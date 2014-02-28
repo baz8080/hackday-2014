@@ -8,15 +8,97 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView android:id="@+id/fullscreen_content"
+    <!--<TextView android:id="@+id/fullscreen_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:keepScreenOn="true"-->
+        <!--android:textColor="#33b5e5"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="50sp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/dummy_content" />-->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:weightSum="10"
+        android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="true"
-        android:textColor="#33b5e5"
-        android:textStyle="bold"
-        android:textSize="50sp"
-        android:gravity="center"
-        android:text="@string/dummy_content" />
+        android:keepScreenOn="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="6"
+            android:id="@+id/availability_container"
+            android:background="@color/available_color"
+            android:padding="@dimen/view_padding"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/room_name"
+                android:text="Room name"
+                android:textSize="24dp"
+                android:textColor="@color/room_name_color"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/current_time"
+                android:layout_alignParentRight="true"
+                android:text="12:04"
+                android:textSize="24dp"
+                android:textColor="@color/room_name_color"
+            />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/room_status"
+                android:layout_centerInParent="true"
+                android:src="@drawable/zc_available"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/available_at"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Available at 16:45"
+                android:textSize="60dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/available_at_color"
+            />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:background="@color/times_background"
+            android:paddingLeft="@dimen/view_padding"
+            android:paddingRight="@dimen/view_padding"
+            android:layout_height="0dp">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/black_overlay"
+                android:dividerHeight="2dp"
+                android:id="@+id/events_list"
+            >
+
+            </ListView>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->

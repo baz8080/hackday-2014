@@ -2,4 +2,15 @@
 
     <color name="black_overlay">#66000000</color>
 
+    <color name="available_color">#91b933</color>
+    <color name="unavailable_color">#fe2029</color>
+
+    <color name="room_name_color">#80000000</color>
+    <color name="available_at_color">@android:color/white</color>
+
+    <color name="times_background">#2D2D2D</color>
+
+    <color name="row_event_name_color">#717171</color>
+    <color name="row_time_color">@android:color/white</color>
+
 </resources>

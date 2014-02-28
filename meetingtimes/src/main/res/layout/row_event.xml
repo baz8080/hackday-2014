@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/row_event_name"
+            android:textColor="@color/row_event_name_color"
+            android:textSize="24dp"
+            android:text="Company Meme Policy"
+            android:paddingBottom="4dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/row_event_time"
+            android:layout_below="@id/row_event_name"
+            android:textColor="@color/row_time_color"
+            android:text="12:30 - 13:30"
+            android:textSize="12dp"
+            android:drawablePadding="2dp"
+            android:drawableLeft="@drawable/zc_time"
+            />
+
+    </RelativeLayout>
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/row_event_avatar"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher"
+    />
+
+</RelativeLayout>

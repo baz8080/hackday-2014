@@ -8,8 +8,18 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.zendesk.meetingtimes.util.DateUtil;
 import com.zendesk.meetingtimes.util.SystemUiHider;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -47,6 +57,10 @@ public class MainActivity extends Activity {
     private SystemUiHider mSystemUiHider;
     private CalendarHelper mCalendarHelper;
 
+    private List<Event> mEvents;
+    private EventsAdapter mAdapter;
+    private ListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +69,8 @@ public class MainActivity extends Activity {
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
+
+        mListView = (ListView) findViewById(R.id.events_list);
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -115,15 +131,104 @@ public class MainActivity extends Activity {
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
+
+        final TextView currentTime = (TextView) findViewById(R.id.current_time);
+
+        Timer updateTimeTimer = new Timer();
+
+        updateTimeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                 runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Calendar now = Calendar.getInstance();
+                        currentTime.setText(DateUtil.formatTime(now));
+                    }
+                });
+            }
+        }, 0, 1000);
+
+        Timer updateStatusTimer = new Timer();
+
+        updateStatusTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.i(CalendarHelper.LOG_TAG, "Update events tick...");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateEvents();
+                    }
+                });
+            }
+        }, 0, TimeUnit.MINUTES.toMillis(1));
+
         mCalendarHelper = new CalendarHelper(getLoaderManager(), this);
 
-        mCalendarHelper.getCalendarId(getIntent().getStringExtra(LauncherActivity.EXTRA_ZENCAL_URI), new Callback<Long>() {
+        mCalendarHelper.getCalendar(getIntent().getStringExtra(LauncherActivity.EXTRA_ZENCAL_URI), new Callback<CalendarModel>() {
             @Override
-            public void onResult(Long result) {
-                Log.i(CalendarHelper.LOG_TAG, String.valueOf(result));
+            public void onResult(CalendarModel result) {
+
+                TextView roomName = (TextView) findViewById(R.id.room_name);
+                roomName.setText(result.getDisplayName());
+
+                long calendarDatabaseId = result.getId();
+
+                mCalendarHelper.subscribeToEvents(calendarDatabaseId, new CalendarHelper.EventsListener() {
+
+                    @Override
+                    public void onEventsUpdated(List<Event> events) {
+                        mEvents = events;
+                        updateEvents();
+                    }
+                });
             }
         });
+    }
 
+    private void updateEvents() {
+
+        if (mEvents == null || mEvents.size() == 0) {
+            return;
+        }
+
+        mAdapter = new EventsAdapter(this, R.layout.row_event, mEvents);
+        mListView.setAdapter(mAdapter);
+
+        /**
+         * TODO
+         * First I have to see if there's a meeting happening now or not
+         */
+
+        final ImageView status = (ImageView) findViewById(R.id.room_status);
+        final View availabilityContainer = findViewById(R.id.availability_container);
+        final TextView availableAtView = (TextView) findViewById(R.id.available_at);
+
+        long now = System.currentTimeMillis();
+        boolean available = true;
+        int currentMeetingIndex = 0;
+
+        for (int i = 0; i < mEvents.size() && currentMeetingIndex == 0; i++) {
+
+            Event event = mEvents.get(i);
+
+            if (now >= event.getStartMillisecondsUtc() && now <= event.getEndMillisecondsUtc()) {
+                available = false;
+                currentMeetingIndex = i;
+            }
+        }
+
+        if (available) {
+            status.setImageResource(R.drawable.zc_available);
+            availabilityContainer.setBackgroundColor(getResources().getColor(R.color.available_color));
+            availableAtView.setText("Available for ...");
+        } else {
+            status.setImageResource(R.drawable.zc_unavailable);
+            availabilityContainer.setBackgroundColor(getResources().getColor(R.color.unavailable_color));
+            availableAtView.setText("Available at ...");
+        }
     }
 
     @Override

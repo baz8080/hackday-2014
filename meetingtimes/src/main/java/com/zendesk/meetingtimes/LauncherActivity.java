@@ -28,7 +28,7 @@ public class LauncherActivity extends Activity {
 
         IntentIntegrator integrator = new IntentIntegrator(this);
 
-//        integrator.initiateScan();
+        //integrator.initiateScan();
 
         // Hack the calendar uri for maximum speed!
         launchCalendarDisplay(LARGE_ROOM);
