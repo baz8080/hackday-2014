@@ -199,7 +199,10 @@ public class MainActivity extends Activity {
 
         /**
          * TODO
-         * First I have to see if there's a meeting happening now or not
+         * 1. Scroll the list automatically to the current
+         * 2. Available for x
+         * 3. Available in x
+         * 4. Picasso cache?
          */
 
         final ImageView status = (ImageView) findViewById(R.id.room_status);
@@ -208,15 +211,13 @@ public class MainActivity extends Activity {
 
         long now = System.currentTimeMillis();
         boolean available = true;
-        int currentMeetingIndex = 0;
 
-        for (int i = 0; i < mEvents.size() && currentMeetingIndex == 0; i++) {
+        for (int i = 0; i < mEvents.size(); i++) {
 
             Event event = mEvents.get(i);
 
             if (now >= event.getStartMillisecondsUtc() && now <= event.getEndMillisecondsUtc()) {
                 available = false;
-                currentMeetingIndex = i;
             }
         }
 
@@ -229,6 +230,7 @@ public class MainActivity extends Activity {
             availabilityContainer.setBackgroundColor(getResources().getColor(R.color.unavailable_color));
             availableAtView.setText("Available at ...");
         }
+
     }
 
     @Override

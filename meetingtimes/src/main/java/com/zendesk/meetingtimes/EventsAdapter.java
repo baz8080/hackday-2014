@@ -65,7 +65,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
                 eventEnd.setTimeZone(TimeZone.getDefault());
 
                 sb.append(" - ");
-                sb.append(DateUtil.formatTime(eventStart));
+                sb.append(DateUtil.formatTime(eventEnd));
             }
 
             eventTime.setText(sb.toString());

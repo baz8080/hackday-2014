@@ -246,7 +246,11 @@ public class CalendarHelper {
             event.setRepeatDates(cursor.getString(PROJECTION_RDATE_IDX));
 
 
-            if (startTime >= startOfDay && startTime <= endOfDay) {
+            boolean eventIsToday = startTime >= startOfDay && startTime <= endOfDay;
+            boolean eventIsCurrent = System.currentTimeMillis() < event.getEndMillisecondsUtc();
+
+
+            if (eventIsToday && eventIsCurrent) {
                 events.add(event);
             }
         }
